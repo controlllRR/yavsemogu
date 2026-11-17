@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#dff2ff" />
+  <title>Линии в ритме — Я всё могу!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Fredoka:wght@600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=2" />
+</head>
+<body>
+  <main id="app">
+    <a class="back-home" href="../../index.html">← На сайт</a>
+    <header>
+      <div>
+        <p class="eyebrow">Моторика и ритм</p>
+        <h1>Линии в ритме</h1>
+        <p class="tagline">Следи за линией под музыку · работает без интернета</p>
+      </div>
+      <img class="mascot" src="assets/robot.webp" width="540" height="272" alt="Робот наблюдает за игрой" decoding="async" />
+    </header>
+
+    <button type="button" id="teacherLaunch" class="teacherLaunch" aria-label="Показать или скрыть настройки педагога" aria-controls="controls" aria-expanded="false">Настройки</button>
+
+    <div class="layout">
+      <div class="stageShell">
+        <section class="screen" id="screen" aria-label="Игровое поле">
+          <div class="hud">
+            <span class="pill" id="roundLabel">Раунд 0 / 10</span>
+            <span class="pill" id="stateLabel">Выберите линию</span>
+          </div>
+          <svg id="board" viewBox="0 0 1000 540" preserveAspectRatio="xMidYMid meet" aria-label="Поле с анимируемой линией. В режиме рисования проведите по нему пальцем.">
+            <defs>
+              <radialGradient id="stageGlow">
+                <stop stop-color="#ffffff" stop-opacity=".95" />
+                <stop offset="1" stop-color="#fdfaf0" stop-opacity=".55" />
+              </radialGradient>
+              <filter id="glow"><feGaussianBlur stdDeviation="6" /></filter>
+            </defs>
+            <rect width="1000" height="540" fill="url(#stageGlow)" />
+            <g id="grid" opacity=".14" stroke="#b8d7ea" stroke-width="1"></g>
+            <path id="ghost" fill="none" stroke="#d4b2f1" stroke-opacity=".35" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" />
+            <g id="coloredSegments"></g>
+            <path id="drawPath" fill="none" stroke="#78d38f" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" visibility="hidden" />
+            <circle id="headGlow" cx="0" cy="0" r="24" fill="#f4cbff" opacity=".30" visibility="hidden" />
+            <circle id="head" cx="0" cy="0" r="11" fill="white" stroke="#a3b8ff" stroke-width="4" visibility="hidden" />
+            <circle id="traceFinger" cx="0" cy="0" r="12" fill="#8bdc9a" stroke="#ffffff" stroke-width="2" visibility="hidden" />
+            <text id="canvasText" x="500" y="509" font-size="17" fill="#6f8db5" text-anchor="middle">Повторяй линию или нарисуй свою</text>
+          </svg>
+          <div class="splash" id="overlay">
+            <div class="splashCard">
+              <div class="heroSymbols" aria-hidden="true"><span>∿</span><span>♪</span><span>✦</span></div>
+              <h2 id="overlayTitle">Твоя линия — твой ритм</h2>
+              <p id="overlayDesc">Выбирай волны, зигзаги и фигуры или нарисуй свою линию. Чтобы начать, откройте настройки педагога.</p>
+              <button class="btn primary" id="overlayAction" type="button">Открыть настройки</button>
+              <div class="adultCue">Управление доступно педагогу</div>
+            </div>
+          </div>
+          <div class="screenFoot">
+            <div class="leftFoot">
+              <span class="hand left"><i></i>левая рука</span>
+              <span class="hand right"><i></i>правая рука</span>
+              <span class="roundLine"><span id="shapeName">Зигзаг</span> · <span id="timeLabel">0,0 с</span></span>
+            </div>
+            <span class="smallNote" id="scoreLabel">Играй в удобном ритме</span>
+          </div>
+        </section>
+
+        <div class="editorBar" id="editorBar">
+          <span class="editorText" id="editorHint">Нарисуй пальцем или мышью непрерывную линию. Начни где угодно.</span>
+          <button class="btn ghost" id="clearBtn" type="button">Очистить</button>
+          <button class="btn green" id="saveBtn" type="button">Сохранить линию</button>
+          <button class="btn" id="cancelBtn" type="button">Отмена</button>
+        </div>
+
+        <details class="infoBlock">
+          <summary>Как играть и рисовать линии</summary>
+          <p><b>Режим «Повторяй»:</b> следи за белой точкой и повторяй направление движения рукой. Розовый участок — левая рука, голубой — правая.</p>
+          <p><b>Режим «Обводи»:</b> проведи пальцем или мышью по линии. Оцениваются точность и пройденный путь.</p>
+          <p><b>Своя линия:</b> нажми «Нарисовать свою», проведи линию и сохрани. Она останется в этом браузере. Музыка создаётся в программе, внешних файлов не нужно.</p>
+        </details>
+      </div>
+
+      <aside class="controls teacherDrawer" id="controls" aria-label="Закрытая панель педагога" aria-hidden="true" inert>
+        <div class="drawerTop">
+          <div>
+            <div class="teacherEyebrow">Панель педагога</div>
+            <h2>Настройки игры</h2>
+          </div>
+          <button class="drawerClose" id="teacherClose" type="button" aria-label="Скрыть настройки">✕</button>
+        </div>
+        <p class="drawerHint">Выберите задание и нажмите «Старт» — панель закроется. Чтобы изменить музыку или поставить паузу, снова откройте «Настройки».</p>
+        <div class="toolbar">
+          <button class="btn primary" id="startBtn" type="button">Старт</button>
+          <button class="btn" id="pauseBtn" type="button" disabled>Пауза</button>
+          <button class="btn green" id="drawBtn" type="button">Нарисовать свою</button>
+          <button class="btn" id="fullBtn" type="button">Весь экран</button>
+        </div>
+        <button type="button" id="teacherLock" class="btn lockBtn">Скрыть панель</button>
+        <div class="field">
+          <label for="mode">Игровой режим</label>
+          <select id="mode">
+            <option value="class">Повторяй движения руками</option>
+            <option value="trace">Обводи пальцем / мышью</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="shape">Форма линии</label>
+          <select id="shape">
+            <option value="random">Каждый раунд разная</option>
+            <option value="zigzag" selected>Зигзаг</option>
+            <option value="wave">Волна</option>
+            <option value="hills">Горки</option>
+            <option value="steps">Лесенка</option>
+            <option value="loops">Петли</option>
+            <option value="spiral">Спираль</option>
+            <option value="eight">Восьмёрка</option>
+            <option value="heart">Сердце</option>
+            <option value="star">Звезда</option>
+            <option value="flower">Цветок</option>
+            <option value="custom">Моя линия</option>
+          </select>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="difficulty">Сложность</label>
+            <select id="difficulty">
+              <option value="easy">Легко</option>
+              <option value="normal" selected>Средне</option>
+              <option value="hard">Сложно</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="rounds">Раундов</label>
+            <select id="rounds">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="999">Без конца</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="duration">Время на линию: <strong id="durationVal">6 с</strong></label>
+          <input type="range" id="duration" min="3" max="20" step="1" value="6" />
+        </div>
+        <div class="field">
+          <label for="colorStyle">Цвет линии</label>
+          <select id="colorStyle">
+            <option value="half">Две половины — левая / правая</option>
+            <option value="alternate">Чередование участков</option>
+            <option value="rainbow">Радужные участки</option>
+            <option value="single">Один цвет</option>
+          </select>
+        </div>
+        <div class="musicPanel">
+          <div class="musicTitle">
+            <span>Музыкальное сопровождение</span>
+            <span id="bpmLabel" class="bpm">120 BPM</span>
+          </div>
+          <div class="field">
+            <label for="music">Выбери мелодию</label>
+            <select id="music">
+              <option value="pop">Электро-поп</option>
+              <option value="funk">Фанк</option>
+              <option value="latin">Латина</option>
+              <option value="chip">8-бит</option>
+              <option value="lofi">Лоу-фай</option>
+              <option value="techno">Техно</option>
+              <option value="break">Брейкбит</option>
+              <option value="waltz">Вальс</option>
+              <option value="ambient">Космос</option>
+              <option value="soft">Нежная мелодия</option>
+              <option value="cues">Только сигналы</option>
+              <option value="off">Без музыки</option>
+            </select>
+          </div>
+          <div class="volumeRow">
+            <label for="volume">Громкость</label>
+            <input id="volume" type="range" min="0" max="100" value="40" step="5" />
+            <output id="volumeValue">40%</output>
+          </div>
+          <div class="musicActions">
+            <button class="btn" id="previewBtn" type="button">Послушать стиль</button>
+            <button class="btn ghost" id="restartBtn" type="button">Заново</button>
+          </div>
+          <div class="musicHelp" id="musicNote">Ритм синхронизирован с анимацией. Стили создаются в браузере.</div>
+        </div>
+        <div class="miniInfo" id="modeNote">Подключи ноутбук к телевизору или интерактивной доске, выбери музыку и нажми «Старт».</div>
+      </aside>
+    </div>
+    <div class="teacherShade" id="teacherShade" hidden></div>
+  </main>
+  <script src="game.js?v=2"></script>
+</body>
+</html>

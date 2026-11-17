@@ -1,0 +1,26 @@
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+.env
+.env.*
+tools/_yt_thumb.jpg
+tools/_extracted*
+*.tmp
+.cursor/
+agent-transcripts/
+
+# local debug / calibration leftovers
+game/chk-*.png
+game/crop-*.png
+game/diff*.png
+game/grid.png
+game/marker*.png
+game/mask*.png
+game/peaks*.png
+game/compare*.png
+game/cells-debug.png
+2b3e7db3-*.png

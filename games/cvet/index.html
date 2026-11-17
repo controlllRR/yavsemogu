@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#101a2c" />
+  <title>Цвет + цифра — Я всё могу!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Fredoka:wght@600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=1" />
+</head>
+<body>
+  <main id="setup" class="shell">
+    <a class="back-home" href="../../index.html">← На сайт</a>
+    <div class="head">
+      <div>
+        <p class="eyebrow">Тренажёр внимания</p>
+        <h1>Цвет + цифра</h1>
+        <p class="lead">Смотри на цвет и число — касайся нужного стаканчика или кнопки как можно быстрее.</p>
+      </div>
+      <div class="logo" aria-hidden="true">
+        <b style="background:#f04438"></b>
+        <b style="background:#f4ba29"></b>
+        <b style="background:#246bdb"></b>
+        <b style="background:#2ab269"></b>
+      </div>
+    </div>
+
+    <div class="panel setupGrid">
+      <section>
+        <h2 style="font-family:var(--display);margin:0 0 10px;font-size:clamp(22px,3vw,30px);color:#355fbc">Подготовьте игру</h2>
+        <p style="margin:0 0 16px;color:var(--muted);font-weight:700;line-height:1.55">Разложите четыре листа с цифрами и поставьте на них стаканчики того же цвета.</p>
+        <div class="legend" aria-label="Соответствия цифр и цветов">
+          <div class="legendItem"><div class="swatch" style="background:#f04438">1</div><span>Красный</span></div>
+          <div class="legendItem"><div class="swatch" style="background:#efb819;color:#232323">2</div><span>Жёлтый</span></div>
+          <div class="legendItem"><div class="swatch" style="background:#246bdb">3</div><span>Синий</span></div>
+          <div class="legendItem"><div class="swatch" style="background:#2ab269">4</div><span>Зелёный</span></div>
+        </div>
+        <div class="divider"></div>
+        <p class="sectionLabel">Режим игры</p>
+        <div class="choiceGroup">
+          <button id="modeCups" type="button" class="choice active" aria-pressed="true">Со стаканчиками<em>Ребёнок касается предметов на столе</em></button>
+          <button id="modeTap" type="button" class="choice" aria-pressed="false">На экране<em>Кнопки на планшете — считаем точность и реакцию</em></button>
+        </div>
+        <ol class="how">
+          <li>Нажмите «Начать игру».</li>
+          <li>На экране появится цвет и число.</li>
+          <li>Как можно быстрее коснитесь нужного стаканчика или кнопки.</li>
+          <li>В режиме стаканчиков сигналы меняются сами; на экране — после верного ответа.</li>
+        </ol>
+        <div class="hintline">
+          <span class="pill">Без интернета</span>
+          <span class="pill">Планшет и ПК</span>
+          <span class="pill">Клавиши 1–4</span>
+          <span class="pill">Пробел = пауза</span>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="font-family:var(--display);margin:0 0 10px;font-size:clamp(22px,3vw,30px);color:#355fbc">Настройки</h2>
+        <p class="small" style="margin:0;color:var(--muted);font-size:13px;font-weight:700;line-height:1.5">Начните медленно. Когда участник освоится — ускоряйте смену карточек.</p>
+        <div class="fields">
+          <label class="field" for="speed">Время на карточку
+            <select id="speed">
+              <option value="3000">3 секунды</option>
+              <option value="2000" selected>2 секунды</option>
+              <option value="1500">1,5 секунды</option>
+              <option value="1200">1,2 секунды</option>
+              <option value="1000">1 секунда</option>
+              <option value="750">0,75 секунды</option>
+              <option value="500">0,5 секунды</option>
+            </select>
+          </label>
+          <label class="field" for="count">Количество сигналов
+            <select id="count">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="40">40</option>
+              <option value="60">60</option>
+              <option value="100">100</option>
+            </select>
+          </label>
+        </div>
+        <label class="check"><input type="checkbox" id="beep" checked>Звуковой сигнал при смене</label>
+        <label class="check"><input type="checkbox" id="countdown" checked>Обратный отсчёт 3–2–1</label>
+        <div class="note" id="modeNote"><strong>Как в занятии:</strong> экран показывает команды, ребёнок касается стаканчиков. Программа не видит стол, поэтому правильность здесь не проверяется.</div>
+        <button id="start" class="primary start" type="button">Начать игру</button>
+      </section>
+    </div>
+    <p class="foot">Локальная игра · данные никуда не отправляются</p>
+  </main>
+
+  <section id="game" hidden aria-label="Игра">
+    <div class="gamebar">
+      <div>
+        <strong>Цвет + цифра</strong>
+        <small id="modeLabel">Со стаканчиками</small>
+      </div>
+      <div class="hudStats">
+        <div class="hudChip" id="counter"><em>Сигнал</em>0 / 20</div>
+        <div class="hudChip" id="errorChip" hidden><em>Ошибки</em><span id="errorLive">0</span></div>
+        <div class="hudChip" id="streakChip" hidden><em>Серия</em><span id="streakLive">0</span></div>
+      </div>
+      <div class="gactions">
+        <button id="pause" type="button">Пауза</button>
+        <button id="fullscreen" type="button">На весь экран</button>
+        <button id="finish" type="button">Завершить</button>
+      </div>
+    </div>
+    <div class="progress"><i id="progressBar" style="width:0"></i></div>
+    <div class="stage wait" id="stage">
+      <div class="streakBanner" id="streakBanner">Серия ×3!</div>
+      <div class="cue" id="cue">
+        <div class="waitNum" id="cueNum">3</div>
+        <div class="waitCaption" id="cueCaption">Приготовьтесь</div>
+      </div>
+    </div>
+    <div id="tapSection" hidden>
+      <div class="tapZone">
+        <button class="tapBtn" data-answer="1" style="background:#f04438" aria-label="Ответ 1, красный">1</button>
+        <button class="tapBtn" data-answer="2" style="background:#efb819;color:#252525" aria-label="Ответ 2, жёлтый">2</button>
+        <button class="tapBtn" data-answer="3" style="background:#246bdb" aria-label="Ответ 3, синий">3</button>
+        <button class="tapBtn" data-answer="4" style="background:#2ab269" aria-label="Ответ 4, зелёный">4</button>
+      </div>
+      <div class="tapInfo">Коснитесь кнопки или нажмите клавишу 1–4</div>
+    </div>
+    <div id="cupsInfo" class="tapInfo" style="padding:12px 12px 16px">Коснитесь соответствующего стаканчика на столе</div>
+  </section>
+
+  <main id="results" class="shell" hidden>
+    <div class="panel celebrate">
+      <p class="eyebrow">Тренировка завершена</p>
+      <h2 id="resultTitle" style="font-family:var(--display);font-size:clamp(26px,4vw,36px);color:#355fbc;margin:0">Отличная работа!</h2>
+      <p id="resultText" style="color:var(--muted);font-weight:700;line-height:1.55"></p>
+      <div class="grade" id="gradeBadge" hidden>Точность 100%</div>
+      <div class="stats">
+        <div class="stat"><strong id="statCount">0</strong><span>Сигналов</span></div>
+        <div class="stat"><strong id="statErrors">—</strong><span>Ошибок</span></div>
+        <div class="stat"><strong id="statTime">—</strong><span>Средняя реакция</span></div>
+        <div class="stat"><strong id="statStreak">—</strong><span>Лучшая серия</span></div>
+      </div>
+      <div class="resactions">
+        <button class="primary" id="again" type="button">Играть ещё</button>
+        <button class="secondary" id="back" type="button">Изменить настройки</button>
+      </div>
+      <p style="margin:18px 0 0;text-align:center"><a class="back-home" href="../../index.html">← На сайт</a></p>
+    </div>
+  </main>
+
+  <script src="game.js?v=1"></script>
+</body>
+</html>

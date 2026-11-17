@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Калибровка клеток 1–100</title>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; background: #1a0f0a; color: #fff; }
+    .bar {
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+      padding: 10px; background: #2a1810; position: sticky; top: 0; z-index: 5;
+    }
+    button, a {
+      font: inherit; font-weight: 800; border: 0; border-radius: 10px;
+      padding: 8px 12px; cursor: pointer; background: #7c3aed; color: #fff; text-decoration: none;
+    }
+    a { background: #444; }
+    #status { font-weight: 800; color: #fde68a; flex: 1; }
+    .board { position: relative; width: min(100vw, 1100px); margin: 0 auto; cursor: crosshair; }
+    img { width: 100%; display: block; pointer-events: none; user-select: none; }
+    .dot {
+      position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px;
+      border-radius: 50%; background: #22c55e; border: 2px solid #fff;
+      font-size: 9px; font-weight: 900; color: #000;
+      display: grid; place-items: center; pointer-events: none;
+      box-shadow: 0 0 0 1px #000;
+    }
+    .dot.last { background: #f59e0b; transform: scale(1.25); }
+    .cand {
+      position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px;
+      border-radius: 50%; background: rgba(0,255,255,.35); pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <a href="./">← Игра</a>
+    <span id="status">Загрузка…</span>
+    <button type="button" id="undo">⌫ Отменить</button>
+    <button type="button" id="clear">Очистить</button>
+    <button type="button" id="save">Скачать cells.json</button>
+  </div>
+  <div class="board" id="board">
+    <img src="../images/board-map.webp?v=2" alt="карта" draggable="false" id="map" />
+  </div>
+  <script>
+    const specials = {12:"green",28:"green",49:"green",70:"green",83:"green",8:"purple",17:"purple",41:"purple",60:"purple",78:"purple",90:"purple"};
+    const board = document.getElementById("board");
+    const status = document.getElementById("status");
+    let cells = [];
+    let candidates = [];
+
+    function render() {
+      board.querySelectorAll(".dot,.cand").forEach((d) => d.remove());
+      candidates.forEach((c) => {
+        const d = document.createElement("div");
+        d.className = "cand";
+        d.style.left = c.x + "%";
+        d.style.top = c.y + "%";
+        board.appendChild(d);
+      });
+      cells.forEach((c, i) => {
+        const d = document.createElement("div");
+        d.className = "dot" + (i === cells.length - 1 ? " last" : "");
+        d.style.left = c.x + "%";
+        d.style.top = c.y + "%";
+        d.textContent = c.n;
+        board.appendChild(d);
+      });
+      status.textContent = cells.length >= 100
+        ? "Готово! Нажми «Скачать cells.json» и замени файл game/cells.json"
+        : `Кликни центр оранжевого кружка № ${cells.length + 1} (прилипнет к ближайшему кружку)`;
+    }
+
+    function snap(x, y) {
+      if (!candidates.length) return { x, y };
+      let best = null, bestD = 1e9;
+      for (const c of candidates) {
+        const d = (c.x - x) ** 2 + (c.y - y) ** 2;
+        if (d < bestD) { bestD = d; best = c; }
+      }
+      // snap if within ~3%
+      if (best && bestD < 9) return { x: best.x, y: best.y };
+      return { x, y };
+    }
+
+    board.addEventListener("click", (e) => {
+      if (cells.length >= 100) return;
+      const r = board.getBoundingClientRect();
+      let x = ((e.clientX - r.left) / r.width) * 100;
+      let y = ((e.clientY - r.top) / r.height) * 100;
+      const s = snap(x, y);
+      const n = cells.length + 1;
+      cells.push({ n, x: +s.x.toFixed(3), y: +s.y.toFixed(3), kind: specials[n] || "orange" });
+      render();
+    });
+
+    document.getElementById("undo").onclick = () => { cells.pop(); render(); };
+    document.getElementById("clear").onclick = () => { cells = []; render(); };
+    document.getElementById("save").onclick = () => {
+      const blob = new Blob([JSON.stringify({ width: 1024, height: 724, cells }, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "cells.json";
+      a.click();
+      window.__cellsJSON = JSON.stringify({ width: 1024, height: 724, cells }, null, 2);
+    };
+
+    window.__cal = {
+      get: () => cells,
+      set: (arr) => { cells = arr; render(); },
+      json: () => JSON.stringify({ width: 1024, height: 724, cells }, null, 2),
+    };
+
+    fetch("./candidates.json").then(r => r.json()).then(c => { candidates = c; render(); }).catch(() => render());
+  </script>
+</body>
+</html>

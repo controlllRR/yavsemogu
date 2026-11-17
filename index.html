@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Мозгоград — город, где растёт каждый талант</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Fredoka:wght@600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=13" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <link rel="preload" as="image" href="images/title-mozgograd.webp" type="image/webp" />
+  <link rel="preload" as="image" href="images/prince-clean.webp" type="image/webp" />
+  <link rel="preload" as="image" href="images/castle.webp" type="image/webp" />
+</head>
+<body>
+  <svg class="sprite" aria-hidden="true">
+    <defs>
+      <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffe27a"/><stop offset="100%" stop-color="#f5b942"/></linearGradient>
+      <linearGradient id="gPurp" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#d8b4fe"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient>
+      <linearGradient id="gGreen" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#bbf7d0"/><stop offset="100%" stop-color="#22c55e"/></linearGradient>
+      <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#bfdbfe"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+      <linearGradient id="gOrange" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fed7aa"/><stop offset="100%" stop-color="#f97316"/></linearGradient>
+    </defs>
+    <symbol id="i-bulb" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ecfdf5"/><path d="M32 10c-9 0-16 7-16 16 0 6 3 11 8 14v6h16v-6c5-3 8-8 8-14 0-9-7-16-16-16z" fill="url(#gGold)"/><rect x="26" y="48" width="12" height="4" rx="2" fill="#cbd5e1"/><rect x="27" y="53" width="10" height="3" rx="1.5" fill="#94a3b8"/><path d="M28 24h8M30 29h4" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#f3e8ff"/><path d="M22 24c-4 0-7 3-7 8 0 3 2 6 5 7-1 2-1 4 1 6 2 2 5 2 8 1 2 3 6 5 10 5s8-2 10-5c3 1 6 1 8-1 2-2 2-4 1-6 3-1 5-4 5-7 0-5-3-8-7-8-1-5-6-8-11-8-4 0-7 2-9 4-2-2-5-4-9-4-2 0-4.5 1-5 6z" fill="url(#gPurp)"/><path d="M32 20v28M24 30c4 2 8 2 8 8M40 28c-4 3-8 2-8 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#fff7ed"/><path d="M20 16h24v8c0 8-6 14-12 16-6-2-12-8-12-16z" fill="url(#gGold)"/><path d="M44 18h6c0 8-4 12-8 13M20 18h-6c0 8 4 12 8 13" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/><rect x="28" y="38" width="8" height="6" fill="#f59e0b"/><path d="M22 50h20l-3-6H25z" fill="#fbbf24"/></symbol>
+    <symbol id="i-puzzle" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#eff6ff"/><path d="M16 18h12c0 4 4 6 6 6s6-2 6-6h12v12c-4 0-6 4-6 6s2 6 6 6v12H40c0-4-4-6-8-6s-8 2-8 6H16V36c4 0 6-4 6-6s-2-6-6-6z" fill="url(#gBlue)"/></symbol>
+    <symbol id="i-letters" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ecfdf5"/><text x="14" y="40" font-size="20" font-family="Nunito,sans-serif" font-weight="800" fill="#16a34a">A</text><text x="33" y="44" font-size="20" font-family="Nunito,sans-serif" font-weight="800" fill="#2563eb">B</text></symbol>
+    <symbol id="i-paint" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#fff7ed"/><path d="M20 40c0-10 12-24 20-28 2 8-2 16-8 22 6-2 14 2 16 10-8 2-20 2-28-4z" fill="url(#gOrange)"/><circle cx="24" cy="42" r="5" fill="#ef4444"/><circle cx="34" cy="46" r="5" fill="#22c55e"/><circle cx="42" cy="40" r="5" fill="#3b82f6"/></symbol>
+    <symbol id="i-smile" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#fefce8"/><circle cx="32" cy="32" r="18" fill="url(#gGold)"/><circle cx="26" cy="28" r="2.5" fill="#7c2d12"/><circle cx="38" cy="28" r="2.5" fill="#7c2d12"/><path d="M24 36c3 6 13 6 16 0" fill="none" stroke="#7c2d12" stroke-width="2.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-user" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#eef2ff"/><circle cx="32" cy="24" r="8" fill="url(#gBlue)"/><path d="M18 48c2-10 8-14 14-14s12 4 14 14" fill="url(#gBlue)"/><circle cx="46" cy="22" r="6" fill="#22c55e"/><path d="M43 22h6M46 19v6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-gamepad" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#fdf4ff"/><path d="M14 34c0-8 6-12 12-12h12c6 0 12 4 12 12 0 6-4 12-12 12h-4l-4 6-4-6h-4c-8 0-12-6-12-12z" fill="url(#gPurp)"/><path d="M24 30v8M20 34h8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="42" cy="30" r="2.2" fill="#fb7185"/><circle cx="46" cy="36" r="2.2" fill="#fde047"/></symbol>
+    <symbol id="i-star" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#fffbeb"/><path d="M32 12l5 14h14l-11 8 4 14-12-8-12 8 4-14-11-8h14z" fill="url(#gGold)"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ecfeff"/><rect x="16" y="34" width="8" height="16" rx="2" fill="#38bdf8"/><rect x="28" y="24" width="8" height="26" rx="2" fill="#6366f1"/><rect x="40" y="16" width="8" height="34" rx="2" fill="#22c55e"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 64 64"><path d="M10 42 16 18l12 14 4-18 4 18 12-14 6 24z" fill="url(#gGold)"/><rect x="12" y="42" width="40" height="8" rx="3" fill="#f59e0b"/><circle cx="16" cy="18" r="4" fill="#f472b6"/><circle cx="32" cy="12" r="4" fill="#60a5fa"/><circle cx="48" cy="18" r="4" fill="#34d399"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ecfdf5"/><path d="M32 12 16 18v14c0 12 8 20 16 22 8-2 16-10 16-22V18z" fill="url(#gGreen)"/><path d="M24 32l6 6 12-14" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-book" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#eff6ff"/><path d="M18 16h12c6 0 8 2 8 2s2-2 8-2h12v32H46s-6 2-14 2-14-2-14-2H18z" fill="url(#gBlue)"/><path d="M32 18v30" stroke="#fff" stroke-width="2"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#f0fdf4"/><path d="M44 24a14 14 0 1 0 2 12" fill="none" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/><path d="M44 16v10h-10" fill="none" stroke="#16a34a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+  <header class="header">
+    <div class="wrap header-inner">
+      <a class="logo" href="#top" aria-label="Я всё могу! Детское пространство">
+        <svg class="logo-kid" viewBox="0 0 70 120" aria-hidden="true">
+          <circle cx="32" cy="18" r="12" fill="#6b2fa0"/>
+          <path fill="#6b2fa0" d="M22 32c10-3 22-1 28 8 4 6 10 6 16-6l4 3c-8 16-14 22-26 16v50c0 4-3 8-8 8s-8-4-8-8V62c-6 3-12 12-16 24l-5-2c5-16 11-28 15-52z"/>
+        </svg>
+        <span class="logo-words">
+          <span class="logo-name">
+            <span class="w"><b class="o">Я</b></span>
+            <span class="w"><b class="g">в</b><b class="l">с</b><b class="b">ё</b></span>
+            <span class="w"><b class="r">м</b><b class="y">о</b><b class="t">г</b><b class="l">у</b><b class="o">!</b></span>
+          </span>
+          <span class="logo-sub">Детское пространство</span>
+        </span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="game/">Игра</a>
+        <a href="#games">Игры</a>
+        <a href="#about">О нас</a>
+        <a href="#pricing">Тарифы</a>
+        <a href="#parents">Для родителей</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+      <div class="header-actions">
+        <button class="btn btn-text" type="button" data-open="login">Войти</button>
+        <a class="btn btn-primary" href="#pricing">Попробовать бесплатно</a>
+        <button class="menu-btn" type="button" id="menuBtn" aria-label="Меню"></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+        <div class="hero-copy">
+          <p class="eyebrow">Детское развитие в игровой форме</p>
+          <h1>
+            <img class="title-logo" src="images/title-mozgograd.webp" alt="Мозгоград" width="992" height="177" decoding="async" fetchpriority="high">
+            город, где растёт
+            <span class="pink">каждый талант!</span>
+          </h1>
+          <p class="lead">Развивающие игры для детей от 3 до 12 лет.<br>Играй, развивайся, побеждай!</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary btn-fat" href="#pricing">
+              Попробовать бесплатно
+              <small>3 дня доступа ко всем играм</small>
+            </a>
+            <a class="btn btn-white" href="#how">Как это работает? →</a>
+          </div>
+          <ul class="stats">
+            <li><span class="stat-ico"><svg><use href="#i-gamepad"></use></svg></span><span>Более 300<br>игр</span></li>
+            <li><span class="stat-ico"><svg><use href="#i-shield"></use></svg></span><span>Безопасно<br>для детей</span></li>
+            <li><span class="stat-ico"><svg><use href="#i-star"></use></svg></span><span>Развитие<br>через игру</span></li>
+            <li><span class="stat-ico"><svg><use href="#i-user"></use></svg></span><span>Доступ с<br>любого устройства</span></li>
+          </ul>
+        </div>
+
+        <div class="hero-art">
+          <img class="castle" src="images/castle.webp" alt="" width="1000" height="562" decoding="async" fetchpriority="high">
+          <img class="prince" src="images/prince-clean.webp?v=11" alt="Главный герой Мозгограда" width="338" height="788" decoding="async" fetchpriority="high">
+          <span class="sparkle s1"></span><span class="sparkle s2"></span><span class="sparkle s3"></span><span class="sparkle s4"></span>
+          <span class="bubble b1"><svg><use href="#i-bulb"></use></svg></span>
+          <span class="bubble b2"><svg><use href="#i-brain"></use></svg></span>
+          <span class="bubble b3"><svg><use href="#i-trophy"></use></svg></span>
+          <span class="bubble b4"><svg><use href="#i-puzzle"></use></svg></span>
+          <aside class="gift">
+            <img src="images/gift.webp" alt="" width="220" height="220" decoding="async">
+            <div>
+              <strong>Попробуйте сейчас — подарок внутри!</strong>
+              <p>3 дня полного доступа ко всем играм платформы</p>
+            </div>
+            <span class="gift-go" aria-hidden="true">→</span>
+          </aside>
+        </div>
+      </section>
+
+      <section class="block wrap" id="about">
+        <h2>Развиваем главное</h2>
+        <div class="skills">
+          <article><div class="ico"><svg><use href="#i-brain"></use></svg></div><h3>Мышление</h3><p>Логика, память, внимание</p></article>
+          <article><div class="ico"><svg><use href="#i-letters"></use></svg></div><h3>Обучение</h3><p>Математика, чтение, английский язык</p></article>
+          <article><div class="ico"><svg><use href="#i-paint"></use></svg></div><h3>Творчество</h3><p>Воображение, рисование, музыка</p></article>
+          <article><div class="ico"><svg><use href="#i-smile"></use></svg></div><h3>Эмоции</h3><p>Эмоциональный интеллект, доброта</p></article>
+          <article><div class="ico"><svg><use href="#i-trophy"></use></svg></div><h3>Навыки</h3><p>Самостоятельность, усидчивость, речь</p></article>
+        </div>
+      </section>
+
+      <section class="block wrap" id="games">
+        <div class="row-head">
+          <h2>Популярные игры</h2>
+          <a class="more" href="#games">Смотреть все игры</a>
+        </div>
+        <div class="carousel">
+          <button class="arrow left" type="button" id="prev" aria-label="Назад">‹</button>
+          <div class="track" id="gamesTrack">
+            <a class="game" href="game/" style="text-decoration:none;color:inherit">
+              <img src="images/board-map.webp" alt="" width="420" height="297" loading="lazy" decoding="async" style="object-fit:cover;aspect-ratio:1;border-radius:18px">
+              <span>5–10 лет</span><h3>Я всё могу!</h3><p>Счёт, кубики, карта Смоленска</p>
+            </a>
+            <a class="game" href="games/linii/" style="text-decoration:none;color:inherit">
+              <img src="images/game-linii.webp" alt="" width="420" height="420" loading="lazy" decoding="async">
+              <span>4–10 лет</span><h3>Линии в ритме</h3><p>Моторика, ритм, внимание</p>
+            </a>
+            <a class="game" href="games/cvet/" style="text-decoration:none;color:inherit">
+              <img src="images/game-cvet.webp" alt="" width="420" height="420" loading="lazy" decoding="async">
+              <span>4–9 лет</span><h3>Цвет + цифра</h3><p>Внимание, реакция, цвета</p>
+            </a>
+            <a class="game" href="games/ritm/" style="text-decoration:none;color:inherit">
+              <img src="images/game-ritm.webp" alt="" width="420" height="420" loading="lazy" decoding="async">
+              <span>3–10 лет</span><h3>Ритм-игра</h3><p>Body percussion, музыка, движение</p>
+            </a>
+            <article class="game"><img src="images/game-robot.webp" alt="" width="420" height="420" loading="lazy" decoding="async"><span>5–8 лет</span><h3>Космическая логика</h3><p>Логика, внимание</p></article>
+            <article class="game"><img src="images/game-forest.webp" alt="" width="420" height="420" loading="lazy" decoding="async"><span>4–7 лет</span><h3>Спаси королевство</h3><p>Мышление, стратегия</p></article>
+            <article class="game"><img src="images/game-math.webp" alt="" width="420" height="420" loading="lazy" decoding="async"><span>6–9 лет</span><h3>Математика</h3><p>Математика, счёт</p></article>
+            <article class="game"><img src="images/game-art.webp" alt="" width="420" height="420" loading="lazy" decoding="async"><span>4–8 лет</span><h3>Цветные фантазии</h3><p>Творчество, воображение</p></article>
+            <article class="game"><img src="images/game-world.webp" alt="" width="420" height="420" loading="lazy" decoding="async"><span>7–12 лет</span><h3>Вокруг света</h3><p>Познание мира</p></article>
+          </div>
+          <button class="arrow right" type="button" id="next" aria-label="Вперёд">›</button>
+        </div>
+      </section>
+
+      <section class="block wrap" id="how">
+        <h2>Как это работает?</h2>
+        <ol class="steps">
+          <li><div class="step"><svg><use href="#i-user"></use></svg></div><h3>1. Создайте аккаунт</h3><p>Быстрая регистрация для ребёнка</p></li>
+          <li><div class="step"><svg><use href="#i-gamepad"></use></svg></div><h3>2. Выбирайте игры</h3><p>Более 300 игр на любой вкус</p></li>
+          <li><div class="step"><svg><use href="#i-star"></use></svg></div><h3>3. Играйте и развивайтесь</h3><p>Получайте награды и достижения</p></li>
+          <li><div class="step"><svg><use href="#i-chart"></use></svg></div><h3>4. Отслеживайте прогресс</h3><p>Родительский контроль и отчёты</p></li>
+        </ol>
+      </section>
+
+      <section class="pricing wrap" id="pricing">
+        <div class="pricing-left">
+          <h2>Безлимитный доступ<br>ко всем играм МОЗГОГРАДа</h2>
+          <ul>
+            <li>Открывайте новые игры каждый месяц</li>
+            <li>Играйте без ограничений</li>
+            <li>Отслеживайте прогресс ребёнка</li>
+          </ul>
+        </div>
+        <div class="pricing-card">
+          <p class="from">Всего от <b>299 ₽</b> в месяц</p>
+          <p class="note">Экономия до 40% при оплате за год</p>
+          <a class="btn btn-gold" href="#contacts">Выбрать тариф</a>
+          <a class="trial" href="#contacts">Попробовать бесплатно на 3 дня</a>
+          <span class="crown"><svg><use href="#i-crown"></use></svg></span>
+        </div>
+      </section>
+
+      <section class="trust wrap" id="parents">
+        <p>Нам доверяют родители по всей стране</p>
+        <ul>
+          <li><svg class="tiny"><use href="#i-shield"></use></svg> Безопасный контент</li>
+          <li><svg class="tiny"><use href="#i-book"></use></svg> Соответствует ФГОС</li>
+          <li><svg class="tiny"><use href="#i-star"></use></svg> Проверено педагогами</li>
+          <li><svg class="tiny"><use href="#i-refresh"></use></svg> Постоянные обновления и новинки</li>
+        </ul>
+      </section>
+
+    </main>
+
+    <footer id="contacts">
+      <div class="wrap footer-inner">
+      <a class="logo" href="#top" aria-label="Я всё могу! Детское пространство">
+        <svg class="logo-kid" viewBox="0 0 70 120" aria-hidden="true">
+          <circle cx="32" cy="18" r="12" fill="#6b2fa0"/>
+          <path fill="#6b2fa0" d="M22 32c10-3 22-1 28 8 4 6 10 6 16-6l4 3c-8 16-14 22-26 16v50c0 4-3 8-8 8s-8-4-8-8V62c-6 3-12 12-16 24l-5-2c5-16 11-28 15-52z"/>
+        </svg>
+        <span class="logo-words">
+          <span class="logo-name">
+            <span class="w"><b class="o">Я</b></span>
+            <span class="w"><b class="g">в</b><b class="l">с</b><b class="b">ё</b></span>
+            <span class="w"><b class="r">м</b><b class="y">о</b><b class="t">г</b><b class="l">у</b><b class="o">!</b></span>
+          </span>
+          <span class="logo-sub">Детское пространство</span>
+        </span>
+      </a>
+      <p>© 2026 Мозгоград. Развивающие игры для детей.</p>
+      <a href="mailto:hello@mozgograd.ru">hello@mozgograd.ru</a>
+      </div>
+    </footer>
+
+  <div class="modal" id="loginModal" hidden>
+    <div class="sheet">
+      <button type="button" data-close aria-label="Закрыть">×</button>
+      <h3>Вход в Мозгоград</h3>
+      <form>
+        <input type="email" placeholder="Email родителя" required>
+        <input type="password" placeholder="Пароль" required>
+        <button class="btn btn-primary" type="submit">Войти</button>
+      </form>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
