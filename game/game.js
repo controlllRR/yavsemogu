@@ -1,5 +1,6 @@
 const COLORS = ["#ef4444", "#3b82f6", "#22c55e", "#f59e0b"];
 const DEFAULT_NAMES = ["Красный", "Синий", "Зелёный", "Жёлтый"];
+const DROP_RADIUS_PCT = 5.2;
 
 const PIP_MAP = {
   1: [4],
@@ -20,7 +21,11 @@ const state = {
   phase: "setup", // setup | ready | rolled | moving | won
   lastRoll: [],
   lastSum: 0,
+  stepsLeft: 0,
+  moveDir: 1, // 1 вперёд, -1 назад
+  allowSpecial: false, // спецклетки только после хода по кубикам, не после бонуса
   busy: false,
+  drag: null,
 };
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -62,7 +67,6 @@ function bindSetup() {
   bindChips("#playerCount", (v) => renderNames(Number(v)));
   bindChips("#diceCount", (v) => {
     state.diceCount = Number(v);
-    // mixed needs 2 dice ideally — still allow 1
     syncModeAvailability();
   });
   bindChips("#diceMode", (v) => {
@@ -95,11 +99,12 @@ function startPlay() {
   $("#setupScreen").classList.add("hidden");
   $("#playScreen").classList.remove("hidden");
   $("#winModal").classList.add("hidden");
+  clearMoveMode();
   renderTokens();
   renderRoster();
   updateTurnUI();
   resetDiceUI();
-  log("Бросай кубики и считай ответ — потом ходи!");
+  log("Бросай кубики, посчитай ответ — потом сам ходи фишкой!");
   $("#rollBtn").disabled = false;
   $("#answerBox").classList.add("hidden");
 }
@@ -117,7 +122,6 @@ function cellXY(pos) {
 function renderTokens() {
   const box = $("#tokens");
   box.innerHTML = "";
-  // stack offset when same cell
   const groups = {};
   state.players.forEach((p) => {
     const key = String(p.pos);
@@ -128,6 +132,7 @@ function renderTokens() {
     const el = document.createElement("div");
     el.className = `token p${p.index}`;
     el.dataset.n = String(p.index + 1);
+    el.dataset.player = String(p.index);
     el.id = `token-${p.index}`;
     el.setAttribute("aria-label", `Фишка игрока ${p.name}`);
     el.innerHTML = pawnSvg(p.index + 1);
@@ -139,6 +144,11 @@ function renderTokens() {
     el.style.left = `${x + ox}%`;
     el.style.top = `${y + oy}%`;
     el.style.zIndex = String(2 + p.index + idx);
+    if (state.phase === "moving" && p.index === state.current) {
+      el.classList.add("movable");
+      el.setAttribute("role", "button");
+      el.tabIndex = 0;
+    }
     box.appendChild(el);
   });
 }
@@ -171,41 +181,12 @@ function pawnSvg(num) {
     </svg>`;
 }
 
-function moveTokenVisual(player, toPos) {
-  return new Promise((resolve) => {
-    const from = player.pos;
-    const steps = [];
-    if (toPos > from) {
-      for (let p = from + 1; p <= toPos; p++) steps.push(p);
-    } else if (toPos < from) {
-      for (let p = from - 1; p >= toPos; p--) steps.push(p);
-    }
-    if (!steps.length) {
-      player.pos = toPos;
-      renderTokens();
-      resolve();
-      return;
-    }
-
-    let i = 0;
-    const tick = () => {
-      player.pos = steps[i];
-      renderTokens();
-      const el = $(`#token-${player.index}`);
-      if (el) {
-        el.classList.remove("bounce");
-        void el.offsetWidth;
-        el.classList.add("bounce");
-      }
-      i += 1;
-      if (i >= steps.length) {
-        resolve();
-        return;
-      }
-      setTimeout(tick, 220);
-    };
-    tick();
-  });
+function bounceToken(playerIndex) {
+  const el = $(`#token-${playerIndex}`);
+  if (!el) return;
+  el.classList.remove("bounce");
+  void el.offsetWidth;
+  el.classList.add("bounce");
 }
 
 function renderRoster() {
@@ -248,13 +229,11 @@ function resetDiceUI() {
 }
 
 function planDiceFaces() {
-  // returns [{type:'digit'|'pips'}]
   const n = state.diceCount;
   if (state.diceMode === "dots") return Array.from({ length: n }, () => ({ type: "pips" }));
   if (state.diceMode === "digits") return Array.from({ length: n }, () => ({ type: "digit" }));
-  // mixed
   if (n === 1) return [{ type: Math.random() < 0.5 ? "digit" : "pips" }];
-  return [{ type: "digit" }, { type: "pips" }]; // цифра, потом точки
+  return [{ type: "digit" }, { type: "pips" }];
 }
 
 function setDieValue(el, value) {
@@ -271,6 +250,225 @@ function rollValues(count) {
   return Array.from({ length: count }, () => 1 + Math.floor(Math.random() * 6));
 }
 
+function nextTargetPos() {
+  const player = state.players[state.current];
+  if (state.moveDir > 0) return Math.min(100, player.pos + 1);
+  return Math.max(0, player.pos - 1);
+}
+
+function updateMoveUI() {
+  const box = $("#moveBox");
+  const hint = $("#cellHint");
+  if (state.phase !== "moving" || state.stepsLeft <= 0) {
+    box.classList.add("hidden");
+    hint.classList.add("hidden");
+    return;
+  }
+
+  const target = nextTargetPos();
+  const dirWord = state.moveDir > 0 ? "вперёд" : "назад";
+  $("#moveTitle").textContent =
+    state.moveDir > 0 ? "Перетащи фишку вперёд" : "Перетащи фишку назад";
+  $("#moveSteps").textContent = `Осталось шагов: ${state.stepsLeft}`;
+  box.classList.remove("hidden");
+
+  const { x, y } = cellXY(target);
+  hint.style.left = `${x}%`;
+  hint.style.top = `${y}%`;
+  hint.classList.toggle("back", state.moveDir < 0);
+  hint.classList.remove("hidden");
+  hint.setAttribute("aria-label", `Следующая клетка: ${target === 0 ? "старт" : target}`);
+
+  log(
+    `${state.players[state.current].name}: поставь фишку на ${
+      target === 0 ? "старт" : `клетку ${target}`
+    } (${dirWord}). Осталось ${state.stepsLeft} ${pluralSteps(state.stepsLeft)}.`
+  );
+}
+
+function clearMoveMode() {
+  state.stepsLeft = 0;
+  state.moveDir = 1;
+  state.drag = null;
+  $("#moveBox").classList.add("hidden");
+  $("#cellHint").classList.add("hidden");
+}
+
+function beginManualMove(steps, dir = 1, reason = "", { fromDice = false } = {}) {
+  const player = state.players[state.current];
+  let left = steps;
+
+  if (fromDice) state.allowSpecial = true;
+
+  // Если уже у финиша и идём вперёд — ход не нужен
+  if (dir > 0 && player.pos >= 100) {
+    win(player);
+    return;
+  }
+
+  // Обрезаем шаги, если до финиша меньше
+  if (dir > 0) {
+    left = Math.min(left, 100 - player.pos);
+  } else {
+    left = Math.min(left, player.pos);
+  }
+
+  if (left <= 0) {
+    finishTurnAfterMove();
+    return;
+  }
+
+  state.phase = "moving";
+  state.stepsLeft = left;
+  state.moveDir = dir;
+  state.busy = false;
+  $("#answerBox").classList.add("hidden");
+  $("#rollBtn").disabled = true;
+  if (reason) log(reason);
+  renderTokens();
+  updateMoveUI();
+}
+
+function finishTurnAfterMove() {
+  clearMoveMode();
+  renderTokens();
+  updateTurnUI();
+
+  if (state.phase === "won") return;
+
+  const player = state.players[state.current];
+  if (player.pos >= 100) {
+    win(player);
+    return;
+  }
+
+  if (state.specials && state.allowSpecial) {
+    const cell = state.cells[player.pos - 1];
+    if (cell?.kind === "green") {
+      state.allowSpecial = false;
+      beginManualMove(2, 1, `Зелёная клетка! Перетащи ещё на 2 ${pluralSteps(2)} вперёд 🌟`);
+      return;
+    }
+    if (cell?.kind === "purple") {
+      state.allowSpecial = false;
+      beginManualMove(2, -1, `Фиолетовая клетка… перетащи на 2 ${pluralSteps(2)} назад 😮`);
+      return;
+    }
+  }
+
+  state.allowSpecial = false;
+  nextPlayer();
+  resetDiceUI();
+  $("#rollBtn").disabled = false;
+  state.phase = "ready";
+}
+
+function commitStep() {
+  const player = state.players[state.current];
+  const target = nextTargetPos();
+  player.pos = target;
+  state.stepsLeft -= 1;
+  updateTurnUI();
+  renderTokens();
+  bounceToken(player.index);
+
+  if (player.pos >= 100) {
+    clearMoveMode();
+    win(player);
+    return;
+  }
+
+  if (state.stepsLeft <= 0) {
+    finishTurnAfterMove();
+    return;
+  }
+
+  updateMoveUI();
+}
+
+function pointerToBoardPct(clientX, clientY) {
+  const board = $("#board");
+  const rect = board.getBoundingClientRect();
+  if (!rect.width || !rect.height) return null;
+  return {
+    x: ((clientX - rect.left) / rect.width) * 100,
+    y: ((clientY - rect.top) / rect.height) * 100,
+  };
+}
+
+function distPct(a, b) {
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+  return Math.hypot(dx, dy);
+}
+
+function bindTokenDrag() {
+  const board = $("#board");
+
+  const onMove = (e) => {
+    const drag = state.drag;
+    if (!drag || drag.pointerId !== e.pointerId) return;
+    const token = $(`#token-${drag.playerIndex}`);
+    if (!token) return;
+    const pct = pointerToBoardPct(e.clientX, e.clientY);
+    if (!pct) return;
+    token.style.left = `${pct.x - drag.offsetX}%`;
+    token.style.top = `${pct.y - drag.offsetY}%`;
+  };
+
+  const onUp = (e) => {
+    const drag = state.drag;
+    if (!drag || drag.pointerId !== e.pointerId) return;
+    const token = $(`#token-${drag.playerIndex}`);
+    state.drag = null;
+    document.removeEventListener("pointermove", onMove);
+    document.removeEventListener("pointerup", onUp);
+    document.removeEventListener("pointercancel", onUp);
+    if (!token) return;
+    token.classList.remove("dragging");
+
+    const pct = pointerToBoardPct(e.clientX, e.clientY);
+    const targetPos = nextTargetPos();
+    const targetXY = cellXY(targetPos);
+
+    if (pct && distPct(pct, targetXY) <= DROP_RADIUS_PCT) {
+      commitStep();
+      return;
+    }
+
+    token.style.left = `${drag.homeLeft}%`;
+    token.style.top = `${drag.homeTop}%`;
+    log("Поставь фишку ровно на подсвеченную клетку 🙂");
+  };
+
+  board.addEventListener("pointerdown", (e) => {
+    if (state.phase !== "moving" || state.busy) return;
+    const token = e.target.closest(".token.movable");
+    if (!token) return;
+    const playerIndex = Number(token.dataset.player);
+    if (playerIndex !== state.current) return;
+
+    e.preventDefault();
+    const pct = pointerToBoardPct(e.clientX, e.clientY);
+    if (!pct) return;
+
+    const left = parseFloat(token.style.left) || 0;
+    const top = parseFloat(token.style.top) || 0;
+    state.drag = {
+      playerIndex,
+      pointerId: e.pointerId,
+      offsetX: pct.x - left,
+      offsetY: pct.y - top,
+      homeLeft: left,
+      homeTop: top,
+    };
+    token.classList.add("dragging");
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
+    document.addEventListener("pointercancel", onUp);
+  });
+}
+
 function bindPlay() {
   $("#rollBtn").addEventListener("click", onRoll);
   $("#checkBtn").addEventListener("click", onCheck);
@@ -278,11 +476,13 @@ function bindPlay() {
     if (e.key === "Enter") onCheck();
   });
   $("#restartBtn").addEventListener("click", () => {
+    clearMoveMode();
     $("#playScreen").classList.add("hidden");
     $("#setupScreen").classList.remove("hidden");
     state.phase = "setup";
   });
   $("#winAgain").addEventListener("click", () => {
+    clearMoveMode();
     $("#winModal").classList.add("hidden");
     $("#playScreen").classList.add("hidden");
     $("#setupScreen").classList.remove("hidden");
@@ -300,10 +500,12 @@ function bindPlay() {
     });
     pad.appendChild(b);
   }
+
+  bindTokenDrag();
 }
 
 async function onRoll() {
-  if (state.busy || state.phase === "won") return;
+  if (state.busy || state.phase === "won" || state.phase === "moving") return;
   state.busy = true;
   $("#rollBtn").disabled = true;
   $("#answerBox").classList.add("hidden");
@@ -315,7 +517,6 @@ async function onRoll() {
   const types = diceEls.map((d) => d.dataset.type);
 
   diceEls.forEach((d) => d.classList.add("rolling"));
-  // scramble mid-roll
   const scramble = setInterval(() => {
     diceEls.forEach((d) => setDieValue(d, 1 + Math.floor(Math.random() * 6)));
   }, 70);
@@ -369,61 +570,18 @@ async function onCheck() {
     return;
   }
 
-  $("#hintText").textContent = "Верно! Ходим 🎉";
+  $("#hintText").textContent = "Верно! Теперь ходи фишкой 🎉";
   $("#hintText").className = "hint ok";
-  state.busy = true;
   $("#checkBtn").disabled = true;
-
-  await wait(450);
-  await applyMove(state.lastSum);
-
+  await wait(350);
   $("#checkBtn").disabled = false;
-  $("#answerBox").classList.add("hidden");
-  state.busy = false;
 
-  if (state.phase !== "won") {
-    nextPlayer();
-    resetDiceUI();
-    $("#rollBtn").disabled = false;
-    state.phase = "ready";
-  }
-}
-
-async function applyMove(steps) {
-  const player = state.players[state.current];
-  let target = Math.min(100, player.pos + steps);
-  // exact finish optional: if overshoot, bounce? For kids — allow landing if >= 100
-  if (player.pos + steps >= 100) target = 100;
-
-  log(`${player.name} идёт на ${steps} ${pluralSteps(steps)}…`);
-  await moveTokenVisual(player, target);
-  updateTurnUI();
-
-  if (player.pos >= 100) {
-    win(player);
-    return;
-  }
-
-  if (state.specials) {
-    const cell = state.cells[player.pos - 1];
-    if (cell?.kind === "green") {
-      const bonus = 2;
-      log(`Зелёная клетка! Бонус +${bonus} 🌟`);
-      await wait(400);
-      await moveTokenVisual(player, Math.min(100, player.pos + bonus));
-      updateTurnUI();
-      if (player.pos >= 100) {
-        win(player);
-        return;
-      }
-    } else if (cell?.kind === "purple") {
-      const back = 2;
-      log(`Фиолетовая клетка… назад на ${back} 😮`);
-      await wait(400);
-      await moveTokenVisual(player, Math.max(0, player.pos - back));
-      updateTurnUI();
-    }
-  }
+  beginManualMove(
+    state.lastSum,
+    1,
+    `Верно! Перетащи фишку ${state.lastSum} ${pluralSteps(state.lastSum)} — по одной клетке.`,
+    { fromDice: true }
+  );
 }
 
 function pluralSteps(n) {
@@ -442,6 +600,7 @@ function nextPlayer() {
 
 function win(player) {
   state.phase = "won";
+  clearMoveMode();
   $("#rollBtn").disabled = true;
   $("#winTitle").textContent = "Победа!";
   $("#winText").textContent = `${player.name} первым дошёл до домика!`;
