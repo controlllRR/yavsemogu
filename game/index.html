@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Fredoka:wght@600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="game.css?v=7" />
+  <link rel="stylesheet" href="game.css?v=8" />
 </head>
 <body>
   <div class="app" id="app">
@@ -87,51 +87,58 @@
 
     <!-- PLAY -->
     <section class="screen play" id="playScreen">
-      <header class="play-bar">
-        <a class="back-home" href="../index.html">← На сайт</a>
-        <div class="play-bar-turn" id="turnBox">
-          <span class="turn-swatch" id="turnSwatch" aria-hidden="true"></span>
-          <strong class="turn-name" id="turnName">—</strong>
-          <span class="turn-pos" id="turnPos">старт</span>
-          <ul class="roster" id="roster"></ul>
-        </div>
-        <button type="button" class="btn-ghost" id="settingsBtn">⚙</button>
-        <button type="button" class="btn-ghost" id="restartBtn">Заново</button>
-      </header>
-
-      <div class="board-wrap">
-        <div class="board" id="board" aria-label="Игровое поле">
-          <img class="board-img" src="../images/board-map.webp?v=2" alt="Карта игры Я всё могу" width="1024" height="723" draggable="false" />
-          <div class="special-glow hidden" id="specialGlow" aria-hidden="true"></div>
-          <div class="cell-hint hidden" id="cellHint" aria-hidden="true"></div>
-          <div class="fx-burst hidden" id="fxBurst" aria-hidden="true"></div>
-          <div class="tokens" id="tokens"></div>
-        </div>
-      </div>
-
-      <aside class="panel" id="panel">
-        <div class="dice-stage" id="diceStage">
-          <div class="dice-row" id="diceRow"></div>
-          <button type="button" class="btn-roll" id="rollBtn">Бросить!</button>
-        </div>
-
-        <div class="answer-box hidden" id="answerBox">
-          <div class="answer-row">
-            <input type="number" id="answerInput" min="1" max="24" inputmode="numeric" placeholder="?" />
-            <button type="button" class="btn-check" id="checkBtn">Готово</button>
+      <div class="play-body">
+        <div class="board-wrap">
+          <div class="board" id="board" aria-label="Игровое поле">
+            <img class="board-img" src="../images/board-map.webp?v=2" alt="Карта игры Я всё могу" width="1024" height="723" draggable="false" />
+            <div class="special-glow hidden" id="specialGlow" aria-hidden="true"></div>
+            <div class="cell-hint hidden" id="cellHint" aria-hidden="true"></div>
+            <div class="fx-burst hidden" id="fxBurst" aria-hidden="true"></div>
+            <div class="tokens" id="tokens"></div>
           </div>
-          <p class="hint" id="hintText"></p>
-          <div class="numpad" id="numpad" aria-label="Клавиатура чисел"></div>
         </div>
 
-        <div class="move-box hidden" id="moveBox">
-          <p class="move-steps" id="moveSteps">Шагов: 0</p>
-          <button type="button" class="btn-step" id="stepBtn">Дальше →</button>
-          <p class="move-hint" id="moveHint">Жми кнопку — один шаг</p>
-        </div>
+        <aside class="panel" id="panel">
+          <div class="panel-top">
+            <a class="back-home panel-back" href="../index.html">←</a>
+            <div class="turn" id="turnBox">
+              <span class="turn-swatch" id="turnSwatch" aria-hidden="true"></span>
+              <div class="turn-meta">
+                <strong class="turn-name" id="turnName">—</strong>
+                <span class="turn-pos" id="turnPos">старт</span>
+              </div>
+            </div>
+            <div class="panel-tools">
+              <button type="button" class="btn-ghost" id="settingsBtn" title="Настройки">⚙</button>
+              <button type="button" class="btn-ghost" id="restartBtn" title="Заново">↻</button>
+            </div>
+          </div>
 
-        <div class="log" id="log" aria-live="polite"></div>
-      </aside>
+          <ul class="roster" id="roster"></ul>
+
+          <div class="dice-stage" id="diceStage">
+            <div class="dice-row" id="diceRow"></div>
+            <button type="button" class="btn-roll" id="rollBtn">Бросить!</button>
+          </div>
+
+          <div class="answer-box hidden" id="answerBox">
+            <div class="answer-row">
+              <input type="number" id="answerInput" min="1" max="24" inputmode="numeric" placeholder="?" />
+              <button type="button" class="btn-check" id="checkBtn">Готово</button>
+            </div>
+            <div class="numpad" id="numpad" aria-label="Клавиатура чисел"></div>
+            <p class="hint" id="hintText"></p>
+          </div>
+
+          <div class="move-box hidden" id="moveBox">
+            <p class="move-steps" id="moveSteps">Шагов: 0</p>
+            <button type="button" class="btn-step" id="stepBtn">Дальше →</button>
+            <p class="move-hint" id="moveHint">Жми кнопку — один шаг</p>
+          </div>
+
+          <div class="log" id="log" aria-live="polite"></div>
+        </aside>
+      </div>
     </section>
 
     <!-- WIN -->
@@ -145,6 +152,6 @@
     </div>
   </div>
 
-  <script src="game.js?v=7" type="module"></script>
+  <script src="game.js?v=8" type="module"></script>
 </body>
 </html>
