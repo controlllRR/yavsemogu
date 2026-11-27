@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#dff2ff" />
+  <meta name="theme-color" content="#f2dfd5" />
   <title>Линии в ритме — Я всё могу!</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Fredoka:wght@600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=6" />
 </head>
 <body>
   <main id="app">
@@ -17,12 +17,12 @@
       <div>
         <p class="eyebrow">Моторика и ритм</p>
         <h1>Линии в ритме</h1>
-        <p class="tagline">Следи за линией под музыку · работает без интернета</p>
+        <p class="tagline">Следи за линией под музыку · две руки · классика или синтез</p>
       </div>
       <img class="mascot" src="assets/robot.webp" width="540" height="272" alt="Робот наблюдает за игрой" decoding="async" />
     </header>
 
-    <button type="button" id="teacherLaunch" class="teacherLaunch" aria-label="Показать или скрыть настройки педагога" aria-controls="controls" aria-expanded="false">Настройки</button>
+    <button type="button" id="teacherLaunch" class="teacherLaunch" aria-label="Показать или скрыть настройки" aria-controls="controls" aria-expanded="false">⚙</button>
 
     <div class="layout">
       <div class="stageShell">
@@ -52,10 +52,10 @@
           <div class="splash" id="overlay">
             <div class="splashCard">
               <div class="heroSymbols" aria-hidden="true"><span>∿</span><span>♪</span><span>✦</span></div>
-              <h2 id="overlayTitle">Твоя линия — твой ритм</h2>
-              <p id="overlayDesc">Выбирай волны, зигзаги и фигуры или нарисуй свою линию. Чтобы начать, откройте настройки педагога.</p>
-              <button class="btn primary" id="overlayAction" type="button">Открыть настройки</button>
-              <div class="adultCue">Управление доступно педагогу</div>
+              <h2 id="overlayTitle">Линии в ритме</h2>
+              <p id="overlayDesc">Повторяй линию под музыку. Розовый — левая рука, голубой — правая. Нажми «Начать»!</p>
+              <button class="btn primary" id="overlayAction" type="button">Начать игру</button>
+              <div class="adultCue">Настройки — кнопка ⚙ справа</div>
             </div>
           </div>
           <div class="screenFoot">
@@ -77,9 +77,9 @@
 
         <details class="infoBlock">
           <summary>Как играть и рисовать линии</summary>
-          <p><b>Режим «Повторяй»:</b> следи за белой точкой и повторяй направление движения рукой. Розовый участок — левая рука, голубой — правая.</p>
-          <p><b>Режим «Обводи»:</b> проведи пальцем или мышью по линии. Оцениваются точность и пройденный путь.</p>
-          <p><b>Своя линия:</b> нажми «Нарисовать свою», проведи линию и сохрани. Она останется в этом браузере. Музыка создаётся в программе, внешних файлов не нужно.</p>
+          <p><b>Повторяй:</b> следи за точкой и повторяй движение рукой. Розовый — левая, голубой — правая.</p>
+          <p><b>Межполушарка:</b> два зигзага подряд — сначала левая рука, потом правая продолжает.</p>
+          <p><b>Обводи:</b> проведи пальцем по линии. Можно выбрать классику или синтез в настройках ⚙.</p>
         </details>
       </div>
 
@@ -91,7 +91,7 @@
           </div>
           <button class="drawerClose" id="teacherClose" type="button" aria-label="Скрыть настройки">✕</button>
         </div>
-        <p class="drawerHint">Выберите задание и нажмите «Старт» — панель закроется. Чтобы изменить музыку или поставить паузу, снова откройте «Настройки».</p>
+        <p class="drawerHint">Музыка, форма и режим. «Старт» закрывает панель. Ребёнку достаточно кнопки «Начать» на экране.</p>
         <div class="toolbar">
           <button class="btn primary" id="startBtn" type="button">Старт</button>
           <button class="btn" id="pauseBtn" type="button" disabled>Пауза</button>
@@ -102,6 +102,7 @@
         <div class="field">
           <label for="mode">Игровой режим</label>
           <select id="mode">
+            <option value="hemi" selected>Межполушарка — две руки</option>
             <option value="class">Повторяй движения руками</option>
             <option value="trace">Обводи пальцем / мышью</option>
           </select>
@@ -109,8 +110,9 @@
         <div class="field">
           <label for="shape">Форма линии</label>
           <select id="shape">
+            <option value="hemi" selected>Два зигзага (межполушарка)</option>
             <option value="random">Каждый раунд разная</option>
-            <option value="zigzag" selected>Зигзаг</option>
+            <option value="zigzag">Зигзаг</option>
             <option value="wave">Волна</option>
             <option value="hills">Горки</option>
             <option value="steps">Лесенка</option>
@@ -163,18 +165,32 @@
           <div class="field">
             <label for="music">Выбери мелодию</label>
             <select id="music">
-              <option value="pop">Электро-поп</option>
-              <option value="funk">Фанк</option>
-              <option value="latin">Латина</option>
-              <option value="chip">8-бит</option>
-              <option value="lofi">Лоу-фай</option>
-              <option value="techno">Техно</option>
-              <option value="break">Брейкбит</option>
-              <option value="waltz">Вальс</option>
-              <option value="ambient">Космос</option>
-              <option value="soft">Нежная мелодия</option>
-              <option value="cues">Только сигналы</option>
-              <option value="off">Без музыки</option>
+              <optgroup label="Классика">
+                <option value="classic:soldiers" selected>Чайковский — Марш солдатиков</option>
+                <option value="classic:polka">Чайковский — Полька</option>
+                <option value="classic:sugarplum">Чайковский — Фея Драже</option>
+                <option value="classic:joy">Бетховен — Ода к радости</option>
+                <option value="classic:elephant">Сен-Санс — Слон</option>
+                <option value="classic:morning">Григ — Утро</option>
+                <option value="classic:flowers">Чайковский — Вальс цветов</option>
+                <option value="classic:serenade">Моцарт — Ночная серенада</option>
+                <option value="classic:rondo">Моцарт — Турецкое рондо</option>
+                <option value="classic:tell">Россини — Вильгельм Телль</option>
+              </optgroup>
+              <optgroup label="Синтез в браузере">
+                <option value="soft">Нежная мелодия</option>
+                <option value="waltz">Вальс</option>
+                <option value="pop">Электро-поп</option>
+                <option value="funk">Фанк</option>
+                <option value="latin">Латина</option>
+                <option value="chip">8-бит</option>
+                <option value="lofi">Лоу-фай</option>
+                <option value="techno">Техно</option>
+                <option value="break">Брейкбит</option>
+                <option value="ambient">Космос</option>
+                <option value="cues">Только сигналы</option>
+                <option value="off">Без музыки</option>
+              </optgroup>
             </select>
           </div>
           <div class="volumeRow">
@@ -193,6 +209,6 @@
     </div>
     <div class="teacherShade" id="teacherShade" hidden></div>
   </main>
-  <script src="game.js?v=2"></script>
+  <script src="game.js?v=6"></script>
 </body>
 </html>

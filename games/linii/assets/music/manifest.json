@@ -1,0 +1,82 @@
+[
+  {
+    "id": "soldiers",
+    "file": "soldiers.mp3",
+    "title": "Марш деревянных солдатиков",
+    "composer": "П. Чайковский",
+    "bpm": 104,
+    "bytes": 784538
+  },
+  {
+    "id": "elephant",
+    "file": "elephant.mp3",
+    "title": "Слон",
+    "composer": "К. Сен-Санс",
+    "bpm": 88,
+    "bytes": 2542069
+  },
+  {
+    "id": "joy",
+    "file": "joy.mp3",
+    "title": "Ода к радости",
+    "composer": "Л. Бетховен",
+    "bpm": 96,
+    "bytes": 1804718
+  },
+  {
+    "id": "sugarplum",
+    "file": "sugarplum.mp3",
+    "title": "Танец Феи Драже",
+    "composer": "П. Чайковский",
+    "bpm": 72,
+    "bytes": 2077434
+  },
+  {
+    "id": "morning",
+    "file": "morning.mp3",
+    "title": "Утро — из сюиты «Пер Гюнт»",
+    "composer": "Э. Григ",
+    "bpm": 60,
+    "bytes": 7008230
+  },
+  {
+    "id": "polka",
+    "file": "polka.mp3",
+    "title": "Полька из «Детского альбома»",
+    "composer": "П. Чайковский",
+    "bpm": 112,
+    "bytes": 696309
+  },
+  {
+    "id": "flowers",
+    "file": "flowers.mp3",
+    "title": "Вальс цветов",
+    "composer": "П. Чайковский",
+    "bpm": 132,
+    "bytes": 6487278
+  },
+  {
+    "id": "serenade",
+    "file": "serenade.mp3",
+    "title": "Маленькая ночная серенада — I часть, Allegro",
+    "composer": "В. А. Моцарт",
+    "bpm": 112,
+    "bytes": 3633988
+  },
+  {
+    "id": "rondo",
+    "file": "rondo.mp3",
+    "title": "Турецкое рондо",
+    "composer": "В. А. Моцарт",
+    "bpm": 112,
+    "bytes": 3044952
+  },
+  {
+    "id": "tell",
+    "file": "tell.mp3",
+    "title": "Финал увертюры «Вильгельм Телль»",
+    "composer": "Дж. Россини",
+    "bpm": 120,
+    "bytes": 5052800
+  }
+]

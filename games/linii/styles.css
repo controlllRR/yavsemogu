@@ -1,17 +1,17 @@
 :root {
   color-scheme: light;
-  --bg: #f6fbff;
-  --panel: #ffffff;
-  --panel2: #eef8ff;
-  --ink: #35507f;
-  --muted: #6580aa;
-  --pink: #ff9dc6;
-  --blue: #8dcfff;
-  --mint: #84e0c2;
-  --purple: #ae9cff;
-  --stroke: #b7d9f3;
-  --warm: #fff6e4;
-  --accent: #7ac96c;
+  --bg: #f3e6dc;
+  --panel: #fffaf7;
+  --panel2: #f7efe8;
+  --ink: #4a4568;
+  --muted: #8a8199;
+  --pink: #e8a0c0;
+  --blue: #9bb8e0;
+  --mint: #9dceb8;
+  --purple: #b5a0d4;
+  --stroke: #e0d4c8;
+  --warm: #fff4ea;
+  --accent: #8fbf8a;
   --font: "Nunito", system-ui, sans-serif;
   --display: "Baloo 2", "Fredoka", sans-serif;
 }
@@ -22,7 +22,7 @@ body {
   min-height: 100vh;
   color: var(--ink);
   font-family: var(--font);
-  background: linear-gradient(180deg, #eef9ff, #fff5e8 65%, #fffaf3);
+  background: linear-gradient(180deg, #f2dfd5, #f7ebe3 55%, #fff8f2);
 }
 button, select, input { font: inherit; }
 button { cursor: pointer; }
@@ -73,7 +73,7 @@ header h1 {
   line-height: 1.08;
   letter-spacing: -.03em;
   margin: 0;
-  color: #355fbc;
+  color: #6d5a8d;
 }
 .tagline {
   color: var(--muted);
